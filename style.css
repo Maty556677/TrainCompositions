@@ -159,7 +159,7 @@ body.dark footer {
 
 #noCookiesBtn {
   color: #5865F2;
-  /* Discord modrá */
+  /* Discord */
   text-decoration: none;
   font-weight: 600;
   padding: 0.3rem 0.1rem;
@@ -175,7 +175,7 @@ body.dark footer {
 
 footer a.discord-link {
   color: #5865F2;
-  /* Discord modrá */
+  /* Discord */
   text-decoration: none;
   font-weight: 600;
   padding: 0.3rem 0.1rem;
@@ -388,7 +388,7 @@ body.dark .vehicle-nickname {
 
 .mini-header {
   position: fixed;
-  top: 10px; /* lehce odsazená od vrchu */
+  top: 10px;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(255, 255, 255, 0.95);
@@ -399,7 +399,7 @@ body.dark .vehicle-nickname {
   align-items: center;
   gap: 10px;
   z-index: 1000;
-  width: 500px; /* uprav podle potřeby */
+  width: 500px;
   transition: none;
 }
 

@@ -20,18 +20,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const scrollY = window.scrollY;
 
     if (scrollY <= scrollThreshold) {
-      // Schovat úplně - zachovat centrování z CSS
       miniHeader.style.transform = 'translateX(-50%) translateY(-100%)';
       miniHeader.classList.add('hidden');
     } else {
-      // Zobrazit a animovat
       miniHeader.classList.remove('hidden');
 
       if (scrollY >= maxScroll) {
-        // Úplně zobrazeno - vrátit na původní CSS transform
         miniHeader.style.transform = 'translateX(-50%) translateY(0)';
       } else {
-        // Postupné sesunování se zachováním centrování
         const progress = (scrollY - scrollThreshold) / (maxScroll - scrollThreshold);
         const translateY = -100 + (progress * 100);
         miniHeader.style.transform = `translateX(-50%) translateY(${translateY}%)`;
@@ -39,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Synchronizace hodnot mezi hlavním a mini vyhledáváním
   trainSearch.addEventListener('input', () => {
     miniTrainSearch.value = trainSearch.value;
   });
@@ -47,32 +42,28 @@ document.addEventListener('DOMContentLoaded', () => {
     trainSearch.value = miniTrainSearch.value;
   });
 
-  // Synchronizace tlačítek pro vyhledávání
   miniSearchBtn.addEventListener('click', () => {
-    // Spustí stejnou funkci jako hlavní vyhledávání
     handleSearch(false);
   });
   searchBtn.addEventListener('click', () => {
     handleSearch(false);
   });
 
-  // Vyhledávání po Enteru v mini inputu
+  // Mini header - enter
   miniTrainSearch.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       handleSearch(false);
     }
   });
 
-  // Zpět tlačítko na mini header
+  // mini header - zpet
   miniBackBtn.addEventListener('click', () => {
-    // Stejné jako hlavní homeBtn - smaže výsledky, vyčistí input, zobrazí poslední hledání, skryje zpět tlačítko
     document.querySelectorAll('.train-card').forEach(card => card.remove());
     clearError();
     trainSearch.value = '';
     miniTrainSearch.value = '';
     renderLastSearches();
     setBackButtonVisible(false);
-    // Scroll na vrch stránky, aby to bylo pěkné
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
@@ -112,7 +103,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     last.forEach(query => {
       const btn = document.createElement('button');
-      // Pokud query je jméno vlaku (obsahuje písmena mimo čísla), zobraz v uvozovkách
       const isTrainName = /[A-Z]/.test(query) && /[A-Z]/i.test(query.replace(/[0-9\s\-+,]/g, ''));
       btn.textContent = isTrainName ? `"${query}"` : query;
       btn.style.marginRight = '0.5rem';
@@ -188,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('selectedServer', serverSelect.value);
   });
 
-  // Rozšiřuje rozsahy a oddělené hodnoty
+ // rozsahy a oddelene hodnoty
   function expandRanges(input) {
     input = input.trim();
     if (input.includes('-')) {
@@ -200,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function parseInput(input) {
-    // Rozděl podle čárek nebo plus
+    // carky a plusy
     const parts = input.toUpperCase().split(/[,+]/).map(p => p.trim()).filter(p => p.length > 0);
     return parts;
   }
@@ -341,7 +331,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const startStation = train.StartStation || '?';
       const endStation = train.EndStation || '?';
 
-      // Počítání složení
+      // slozeni
       let locos = 0, units = 0, cars = 0;
       if (Array.isArray(train.Vehicles)) {
         train.Vehicles.forEach(v => {
@@ -428,27 +418,18 @@ document.addEventListener('DOMContentLoaded', () => {
         vehiclesContainer.className = 'vehicles-container';
 
         train.Vehicles.forEach(vehicle => {
-          // Původní text z API (např. "Z2/b11mnouz_61512170064-0")
           let fullVehicleStringOriginal = vehicle;
-
-          // Default: nahradíme první "/" pomlčkou "-"
           let fullVehicleStringFormatted = fullVehicleStringOriginal.replace('/', '-');
-
-          // Rozdělíme podle "/" na části (nickname a zbytek)
           let [nickname, fullNameWithRest] = vehicle.split('/');
-          // fullName je první slovo za lomítkem, nebo celé pokud lomítko není
           let fullName = fullNameWithRest ? fullNameWithRest.split(' ')[0] : vehicle;
-
-          // fallback - pokud existuje nickname nebo fullName, použijeme je místo defaultního formátu
           if (nickname) {
             fullVehicleStringFormatted = fullVehicleStringFormatted || nickname;
           }
           if (fullName) {
-            // Ale pokud fullName je už jiné než původní, použijeme ho
             fullVehicleStringFormatted = fullName || fullVehicleStringFormatted;
           }
 
-          const originalFullName = fullName; // pro mapování obrázků apod.
+          const originalFullName = fullName; // pro mapovani obrazku apod.
 
           let vehicleNumberText = fullName;
           let imgName;
@@ -633,7 +614,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       let filteredTrains;
 
-      // AND hledání (např. ROJ+S1)
+      // AND hledání
       const isAndSearch = input.includes('+') && filters.length > 1;
 
       if (isAndSearch) {
@@ -641,7 +622,7 @@ document.addEventListener('DOMContentLoaded', () => {
           filters.every(f => trainMatchesFilter(train, f))
         );
       } else {
-        // OR hledani (ROJ, S1, 1414, 1415)
+        // OR hledani
         filteredTrains = allData.filter(train =>
           filters.some(f => trainMatchesFilter(train, f))
         );
@@ -659,7 +640,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       renderTrains(filteredTrains);
 
-      // Uložit poslední hledání, jen pokud je validní a nepochází z historie
+      // Posledni hledani validni - uloz ho
       if (!fromHistory) {
         if (filters.length === 1) {
           const single = filters[0];
