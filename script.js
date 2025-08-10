@@ -546,7 +546,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const vehicleDiv = document.createElement('div');
           vehicleDiv.className = 'vehicle';
           vehicleDiv.innerHTML = `
-            <img src="/vehicles/${imgName}.png" title="${titleText}" />
+            <img src="vehicles/${imgName}.png" title="${titleText}" />
             <div class="vehicle-number">${vehicleNumberCapitalized}</div>
             <div class="vehicle-nickname">${displayNickname}${loadText}</div>
           `;
