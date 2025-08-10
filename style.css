@@ -194,7 +194,6 @@ footer a.discord-link:hover {
   border: none;
   color: #000000;
   cursor: pointer;
-  font-family: inherit;
   text-decoration: none;
   font-size: 2rem;
   line-height: 1;
@@ -401,6 +400,7 @@ body.dark .vehicle-nickname {
   gap: 10px;
   z-index: 1000;
   width: 500px; /* uprav podle potřeby */
+  transition: none;
 }
 
 .mini-header.hidden {
@@ -412,4 +412,121 @@ body.dark .vehicle-nickname {
 body.dark .mini-header {
   background: rgb(13, 13, 13, 0.95);
   box-shadow: 0 0 15px 3px rgba(0, 123, 255, 0.3);
+}
+
+#miniBackBtn {
+  color: black;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background: none;
+  text-decoration: none;
+  font-size: 2rem;
+  line-height: 1;
+  padding: 0.2em 0.6em;
+  vertical-align: middle;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.5rem;
+  width: 2.5rem;
+  text-align: center;
+}
+
+body.dark #miniBackBtn {
+  color: white;
+}
+
+/* Custom select styly */
+.custom-select {
+  position: relative;
+  min-width: 50px;
+  max-height: 40px;
+  background-image: none;
+}
+
+.select-selected {
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  padding: 0.7rem 0px 0.7rem 0.7rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.3s, color 1.7s, border-color 0.3s;
+}
+
+.select-selected:after {
+  /*content: "▼";*/
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: #666;
+}
+
+.select-selected.select-arrow-active {
+  border-radius: 30px 30px 0 0;
+}
+
+/*.select-selected.select-arrow-active:after {
+  content: "▲"; 
+}*/
+
+.select-items {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.select-items div {
+  padding: 0.7rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s;
+}
+
+.select-items div:hover {
+  background-color: var(--blue-light);
+}
+
+.select-hide {
+  display: none;
+}
+
+.custom-select img {
+  width: 25px;
+  height: 20px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+body.dark .select-selected {
+  background-color: #2e2e2e;
+  color: #ddd;
+  border-color: #555;
+}
+
+body.dark .select-items {
+  background-color: #2e2e2e;
+  border-color: #555;
+}
+
+body.dark .select-items div:hover {
+  background-color: #404040;
+}
+
+body.dark .select-selected:after {
+  color: #aaa;
 }

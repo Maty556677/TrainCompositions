@@ -15,11 +15,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const miniBackBtn = document.getElementById('miniBackBtn');
 
   window.addEventListener('scroll', () => {
-    const scrollThreshold = 150; // výška scrollu pro zobrazení mini hlavičky
-    if (window.scrollY > scrollThreshold) {
-      miniHeader.classList.remove('hidden');
-    } else {
+    const scrollThreshold = 150;
+    const maxScroll = 500;
+    const scrollY = window.scrollY;
+
+    if (scrollY <= scrollThreshold) {
+      // Schovat úplně - zachovat centrování z CSS
+      miniHeader.style.transform = 'translateX(-50%) translateY(-100%)';
       miniHeader.classList.add('hidden');
+    } else {
+      // Zobrazit a animovat
+      miniHeader.classList.remove('hidden');
+
+      if (scrollY >= maxScroll) {
+        // Úplně zobrazeno - vrátit na původní CSS transform
+        miniHeader.style.transform = 'translateX(-50%) translateY(0)';
+      } else {
+        // Postupné sesunování se zachováním centrování
+        const progress = (scrollY - scrollThreshold) / (maxScroll - scrollThreshold);
+        const translateY = -100 + (progress * 100);
+        miniHeader.style.transform = `translateX(-50%) translateY(${translateY}%)`;
+      }
     }
   });
 
@@ -60,13 +76,13 @@ document.addEventListener('DOMContentLoaded', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
-  
+
   function setBackButtonVisible(visible) {
     homeBtn.classList.toggle('hidden', !visible);
   }
 
   setBackButtonVisible(false);
-  
+
   searchBtn.addEventListener('click', () => handleSearch(false));
   trainSearch.addEventListener('keydown', e => {
     if (e.key === 'Enter') handleSearch(false);
@@ -91,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
     container.style.marginTop = '2rem';
 
     const title = document.createElement('h3');
-    title.textContent = 'Naposledy hledané vlaky:';
+    title.textContent = '[historySection]';
     container.appendChild(title);
 
     last.forEach(query => {
@@ -132,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setBackButtonVisible(false);
   });
 
-  trainSearch.value = localStorage.getItem('lastSuccessfulInput') || '';
+  trainSearch.value = '';
   let darkMode = localStorage.getItem('darkMode') === 'true';
 
   function applyDarkMode(state) {
@@ -166,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       serverSelect.value = localStorage.getItem('selectedServer') || '';
     })
-    .catch(err => console.error('Chyba při načítání seznamu serverů:', err));
+    .catch(err => console.error('[error2]', err));
 
   serverSelect.addEventListener('change', () => {
     localStorage.setItem('selectedServer', serverSelect.value);
@@ -191,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function showLoading() {
     clearError();
-    results.innerHTML = '<p>⏳ Načítání vlaků z API...</p>';
+    results.innerHTML = '<p>[error3]</p>';
   }
 
   function showError(msg) {
@@ -208,11 +224,11 @@ document.addEventListener('DOMContentLoaded', () => {
     clearError();
     const results = document.getElementById('results');
     if (!results) {
-      console.error('Element #results nenalezen');
+      console.error('[error4]');
       return;
     }
     if (trains.length === 0) {
-      showError('Nenalezeny žádné vlaky.');
+      showError('[error5]');
       return;
     }
     results.innerHTML = '';
@@ -310,7 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'b11mnouz_61512170098': 'b11mnouz_61512170098',
       'b11mnouz_61512170064': 'b11mnouz_61512170064',
 
-      
+
     };
 
     trains.forEach(train => {
@@ -339,34 +355,60 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       // Sklonování
-      function sklonovaniVozy(pocet) {
+      const lang = localStorage.getItem('lang') || 'en';
+      const template = translations[lang]?.compositionText || "Vlak složený z {text}.";
+
+      function pluralizeEnglish(count, singular, plural) {
+        return count === 1 ? `1 ${singular}` : `${count} ${plural}`;
+      }
+
+      function pluralizePolish(count, singularGen, pluralGen) {
+        return count === 1 ? `1 ${singularGen}` : `${count} ${pluralGen}`;
+      }
+
+      function sklonovaniVozy(pocet, lang = 'cs') {
+        if (lang === 'en') return pluralizeEnglish(pocet, 'car', 'cars');
+        if (lang === 'pl') return pluralizePolish(pocet, 'wagonu', 'wagonów');
+
         if (pocet === 1) return '1 vozu';
         if (pocet >= 2 && pocet <= 4) return `${pocet} vozů`;
         return `${pocet} vozů`;
       }
 
-      function sklonovaniLokomotiv(pocet) {
+      function sklonovaniLokomotiv(pocet, lang = 'cs') {
+        if (lang === 'en') return pluralizeEnglish(pocet, 'locomotive', 'locomotives');
+        if (lang === 'pl') return pluralizePolish(pocet, 'lokomotywy', 'lokomotyw');
+
         if (pocet === 1) return '1 lokomotivy';
         if (pocet >= 2 && pocet <= 4) return `${pocet} lokomotiv`;
         return `${pocet} lokomotiv`;
       }
 
-      function sklonovaniJednotek(pocet) {
+      function sklonovaniJednotek(pocet, lang = 'cs') {
+        if (lang === 'en') return pluralizeEnglish(pocet, 'unit', 'units');
+        if (lang === 'pl') return pluralizePolish(pocet, 'zespołu', 'zespołów');
+
         if (pocet === 1) return '1 jednotky';
         if (pocet >= 2 && pocet <= 4) return `${pocet} jednotek`;
         return `${pocet} jednotek`;
       }
 
-      let compositionText = '';
+      let textToInsert = '';
       if (units > 0) {
-        compositionText = `Vlak složený z ${sklonovaniJednotek(units)}.`;
+        textToInsert = sklonovaniJednotek(units, lang);
       } else if (locos > 0 && cars === 0) {
-        compositionText = `Vlak složený z ${sklonovaniLokomotiv(locos)}.`;
+        textToInsert = sklonovaniLokomotiv(locos, lang);
       } else if (locos === 1) {
-        compositionText = `Vlak složený z ${sklonovaniVozy(cars)}.`;
+        textToInsert = sklonovaniVozy(cars, lang);
       } else {
-        compositionText = `Vlak složený z ${sklonovaniLokomotiv(locos)} a ${sklonovaniVozy(cars)}.`;
+        const conjunction = lang === 'pl' ? 'i' : 'a';
+        textToInsert = `${sklonovaniLokomotiv(locos, lang)} ${conjunction} ${sklonovaniVozy(cars, lang)}`;
       }
+
+      const compositionText = template.replace("{text}", textToInsert);
+
+
+
 
 
 
@@ -413,7 +455,10 @@ document.addEventListener('DOMContentLoaded', () => {
           function getFallbackImgName(fallbackName) {
             return vehicleImageMap.hasOwnProperty(fallbackName) ? vehicleImageMap[fallbackName] : fallbackName;
           }
-          
+          // bo SimKol
+          if (vehicleNumberText.includes('EN71')) {
+            nickname = 'EN71';
+          }
           if (/^11xa\/80s\//.test(vehicle)) {
             imgName = '11xa_Bc9ou';
             vehicleNumberText = '11xa Bc9ou';
@@ -462,7 +507,6 @@ document.addEventListener('DOMContentLoaded', () => {
                   imgName = match11xa[1].replace(/ /g, '_');
                 }
               }
-
               if (fullName.includes('406Ra')) {
                 imgName = getFallbackImgName(fullName.split('-')[0]);
               }
@@ -487,41 +531,22 @@ document.addEventListener('DOMContentLoaded', () => {
           let loadText = '';
           if (vehicle.includes('@')) {
             const loadPart = vehicle.split('@')[1].split(' ')[0];
-            const loadDict = {
-              Concrete_slab: 'Betonová deska',
-              Gas_pipeline: 'Potrubí',
-              Pipeline: 'Potrubí',
-              Sheet_metal: 'Kovový plech',
-              Steel_circle: 'Ocelový kruh',
-              T_Beam: 'T-nosník',
-              'T-Beam': 'T-nosník',
-              Tie: 'Pražec',
-              Tree_trunk: 'Kmen stromu',
-              Wooden_beam: 'Dřevěný trám',
-              RandomContainerAll: 'Náhodný kontejner',
-              RandomContainer3x20: 'Náhodný kontejner',
-              RandomContainer1x40: 'Náhodný kontejner',
-              RandomContainer2040: 'Náhodný kontejner',
-              RandomContainer1x20: 'Náhodný kontejner',
-              RandomContainer2x20: 'Náhodný kontejner',
-              GasContainer: 'Kontejner s plynem',
-              Petrol: 'Nafta',
-              Coal: 'Uhlí',
-              Ballast: 'Štěrk',
-              Sand: 'Písek',
-              WoodLogs: 'Dřevo'
-            };
-            loadText = loadDict[loadPart] ? ` / ${loadDict[loadPart]}` : '';
+            const translatedCargo = translations[lang]?.cargoNames?.[loadPart];
+            loadText = translatedCargo ? ` / ${translatedCargo}` : '';
           }
 
-          const displayNickname = nickname ? nickname.replace(/([a-zA-Z]+)(\d+)/, '$1 $2') : '';
+          // Bo SimKol - pokud je tam EN, nerozděluj ho mezerou a zapis nickname jako name
+          const displayNickname = nickname ? nickname.replace(/([a-zA-Z]+)(\d+)/, (_, p1, p2) => {
+            if (p1 === 'EN' || "Z2") return p1 + p2; 
+            return p1 + ' ' + p2;
+          }) : '';
           const vehicleNumberCapitalized = vehicleNumberText.charAt(0).toUpperCase() + vehicleNumberText.slice(1);
           const titleText = vehicleImageMap.hasOwnProperty(originalFullName) ? vehicleImageMap[originalFullName] : vehicleNumberCapitalized;
 
           const vehicleDiv = document.createElement('div');
           vehicleDiv.className = 'vehicle';
           vehicleDiv.innerHTML = `
-            <img src="/vehicles/${imgName}.png" alt="${imgName}" title="${titleText}" />
+            <img src="/vehicles/${imgName}.png" title="${titleText}" />
             <div class="vehicle-number">${vehicleNumberCapitalized}</div>
             <div class="vehicle-nickname">${displayNickname}${loadText}</div>
           `;
@@ -547,7 +572,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const json = await res.json();
       return json?.data || [];
     } catch (e) {
-      showError(`Chyba při načítání dat z API: ${e.message}`);
+      showError(`[error6]${e.message}`);
       return [];
     }
   }
@@ -575,19 +600,19 @@ document.addEventListener('DOMContentLoaded', () => {
     clearError();
 
     if (!serverCode && !input) {
-      showError('Vyber server a zadej číslo vlaku.');
+      showError('[chooseError1]');
       renderLastSearches();
       setBackButtonVisible(false);
       return;
     }
     if (!serverCode) {
-      showError('Vyber server.');
+      showError('[chooseError2]');
       renderLastSearches();
       setBackButtonVisible(false);
       return;
     }
     if (!input) {
-      showError('Zadej číslo vlaku.');
+      showError('[chooseError3]');
       renderLastSearches();
       setBackButtonVisible(false);
       return;
@@ -600,7 +625,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const filters = parseInput(input); // rozdělení podle čárek, plusů, rozsahů atd.
 
       if (filters.length === 0) {
-        showError('Neplatný formát čísla nebo rozsahu.');
+        showError('[chooseError4]');
         renderLastSearches();
         setBackButtonVisible(false);
         return;
@@ -626,7 +651,7 @@ document.addEventListener('DOMContentLoaded', () => {
       filteredTrains.sort((a, b) => Number(a.TrainNoLocal) - Number(b.TrainNoLocal));
 
       if (filteredTrains.length === 0) {
-        showError('Nenalezeny žádné vlaky.');
+        showError('[chooseError5]');
         renderLastSearches();
         setBackButtonVisible(false);
         return; // nic neukladej
@@ -646,16 +671,13 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
           saveLastSearches(input.toUpperCase());
         }
-
-        // Uložíme poslední úspěšný vstup
-        localStorage.setItem('lastSuccessfulInput', input);
       }
 
       setBackButtonVisible(true);
       renderLastSearches();
 
     } catch (e) {
-      showError(`Chyba při zpracování: ${e.message}`);
+      showError(`[error1]${e.message}`);
       setBackButtonVisible(false);
     }
   }
@@ -672,7 +694,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // vlaky a linky
     const trainNameWords = trainNameUpper.split(/[\s\-]+/);
-    
+
     // jmeno vlaku
     if (trainNameWords.includes(filter)) return true;
     if (trainNameUpper.includes(filter)) return true;

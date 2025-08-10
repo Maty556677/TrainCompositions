@@ -17,28 +17,43 @@
 <body>
   <div id="app">
     <header>
-      <h1 id="headerText">SimRail - Řazení vlaků</h1>
+      <h1 id="headerText">[headerText]</h1>
       <div class="settings">
         <select id="serverSelect">
-          <option value="">Vyber server</option>
+          <option value="">[serverSelect]</option>
         </select>
-
-        <button id="toggleDarkMode" title="Přepnout režim">☀️</button>
+        <div class="custom-select" id="languageSelector">
+          <div class="select-selected">
+            <img src="" alt="" />
+          </div>
+          <div class="select-items select-hide">
+            <div data-value="cs">
+              <img src="/flags/cs.svg" alt="CZ" />
+            </div>
+            <div data-value="en">
+              <img src="/flags/en.svg" alt="ENG" />
+            </div>
+            <div data-value="pl">
+              <img src="/flags/pl.svg" alt="PL" />
+            </div>
+          </div>
+        </div>
+        <button id="toggleDarkMode">☀️</button>
         <button id="homeBtn" class="hidden">←</button>
       </div>
     </header>
 
     <main>
       <div id="miniHeader" class="mini-header hidden">
-        <input id="miniTrainSearch" type="text" placeholder="Vyhledat vlak..." />
+        <input id="miniTrainSearch" type="text" placeholder="[miniTrainSearch]" />
         <button id="miniSearchBtn">🔍</button>
         <button id="miniBackBtn">⬅</button>
       </div>
 
       <section id="searchSection">
         <input type="text" id="trainSearch"
-          placeholder="Číslo, jméno, linka, kategorie nebo vozidlo   |   Pro průnik použijte „+“   |   Pro oddělení použijte čárku   |   Pro rozsah použijte pomlčku" />
-        <button id="searchBtn">🔎 Vyhledat</button>
+          placeholder="[trainSearch]" />
+        <button id="searchBtn">[searchBtn]</button>
       </section>
 
       <section id="results">
@@ -46,23 +61,23 @@
       <div id="error"></div>
 
       <section id="historySection" class="hidden">
-        <h3>Poslední hledání:</h3>
+        <h3>[historySection]</h3>
         <ul id="historyList"></ul>
       </section>
 
       <section id="popup" class="hidden">
-        🍪 Pro fungování tohoto webu jsou nezbytné cookies.<br />
-        <button id="acceptCookies">Rozumím</button>
+        [popup]<br />
+        <button id="acceptCookies">[acceptCookies]</button>
       </section>
     </main>
 
     <footer>
-      <p>
-        <script>document.write(/\d{4}/.exec(Date())[0])</script>
-        | SimRail - Řazení vlaků | Obrázky z <a href="https://www.vagonweb.cz/" class="credit" target="_blank">vagonweb.cz</a> a <a href="https://www.simrail-edr.de/" class="credit" target="_blank">simrail-edr.de</a>. | <a href="https://discord.gg/7DEr7dmERy" target="_blank" class="discord-link">OFP Community</a> | <a href="#" id="noCookiesBtn">Vymazat poslední hledání</a>
+      <p><script>document.write(/\d{4}/.exec(Date())[0])</script>[footer1]<a href="https://www.vagonweb.cz/" class="credit" target="_blank">vagonweb.cz</a>[footer2]<a href="https://www.simrail-edr.de/" class="credit" target="_blank">simrail-edr.de</a>. | <a href="https://discord.gg/7DEr7dmERy" target="_blank" class="discord-link">OFP Community</a> | <a href="#" id="noCookiesBtn">[footer3]</a>
       </p>
     </footer>
-
+    
+    <script src="translations.js"></script>
+    <script src="language.js"></script>
     <script src="script.js"></script>
 </body>
 
