@@ -1,1 +1,704 @@
-function deleteAllCookies(){document.cookie.split(";").forEach((e=>{const t=e.indexOf("="),n=t>-1?e.substring(0,t):e;document.cookie=n+"=;expires=Thu, 01 Jan 1970 00:00:00 GMT"}))}document.addEventListener("DOMContentLoaded",(()=>{const e=document.getElementById("trainSearch"),t=document.getElementById("searchBtn"),n=document.getElementById("results"),o=document.getElementById("serverSelect"),r=document.getElementById("toggleDarkMode"),s=document.getElementById("popup"),c=document.getElementById("acceptCookies"),a=document.getElementById("homeBtn"),i=document.getElementById("headerText"),l=document.getElementById("miniHeader"),d=document.getElementById("miniTrainSearch"),u=document.getElementById("miniSearchBtn"),m=document.getElementById("miniBackBtn");function E(e){a.classList.toggle("hidden",!e)}function p(){const t=y();if(!t.length)return;const r=document.getElementById("lastSearchesList");r&&r.remove();const s=document.createElement("div");s.id="lastSearchesList",s.style.marginTop="2rem";const c=document.createElement("h3");c.textContent="[historySection]",s.appendChild(c),t.forEach((t=>{const n=document.createElement("button"),r=/[A-Z]/.test(t)&&/[A-Z]/i.test(t.replace(/[0-9\s\-+,]/g,""));n.textContent=r?`"${t}"`:t,n.style.marginRight="0.5rem",n.addEventListener("click",(()=>{e.value=t,o.value&&k(!0)})),s.appendChild(n)})),n.appendChild(s)}window.addEventListener("scroll",(()=>{const e=window.scrollY;if(e<=150)l.style.transform="translateX(-50%) translateY(-100%)",l.classList.add("hidden");else if(l.classList.remove("hidden"),e>=500)l.style.transform="translateX(-50%) translateY(0)";else{const t=100*((e-150)/350)-100;l.style.transform=`translateX(-50%) translateY(${t}%)`}})),e.addEventListener("input",(()=>{d.value=e.value})),d.addEventListener("input",(()=>{e.value=d.value})),u.addEventListener("click",(()=>{k(!1)})),t.addEventListener("click",(()=>{k(!1)})),d.addEventListener("keydown",(e=>{"Enter"===e.key&&k(!1)})),m.addEventListener("click",(()=>{document.querySelectorAll(".train-card").forEach((e=>e.remove())),g(),e.value="",d.value="",p(),E(!1),window.scrollTo({top:0,behavior:"smooth"})})),E(!1),t.addEventListener("click",(()=>k(!1))),e.addEventListener("keydown",(e=>{"Enter"===e.key&&k(!1)}));const h=p;p=function(){h(),document.querySelectorAll("#lastSearchesList button").forEach((e=>{e.addEventListener("click",(()=>E(!0)))}))},a.addEventListener("click",(()=>{document.querySelectorAll(".train-card").forEach((e=>e.remove())),g(),e.value="",p(),E(!1)})),i.addEventListener("click",(()=>{document.querySelectorAll(".train-card").forEach((e=>e.remove())),g(),e.value="",p(),E(!1)})),e.value="";let v="true"===localStorage.getItem("darkMode");function N(e){document.body.classList.toggle("dark",e),r.textContent=e?"🌙":"☀️",localStorage.setItem("darkMode",e)}function f(e){n.innerHTML=`<div class="error-box">❌ ${e}</div>`}function g(){const e=n.querySelector(".error-box");e&&e.remove()}function y(){const e=document.cookie.match(/(?:^|; )lastSearches=([^;]+)/);return e?e[1].split(","):[]}function $(e){e=e.toUpperCase().replace(/^"(.*)"$/,"$1").trim();let t=y().filter((t=>t.toUpperCase()!==e));t.unshift(e),t.length>10&&t.pop(),document.cookie=`lastSearches=${t.join(",")}; path=/; max-age=31536000`}async function k(t=!1){let r=e.value.trim();const s=o.value;if(g(),!s&&!r)return f("[chooseError1]"),p(),void E(!1);if(!s)return f("[chooseError2]"),p(),void E(!1);if(!r)return f("[chooseError3]"),p(),void E(!1);g(),n.innerHTML="<p>[error3]</p>";try{const e=await async function(e){try{const t=await fetch(`https://panel.simrail.eu:8084/trains-open?serverCode=${e}`);if(!t.ok)throw new Error(`${t.status} ${t.statusText}`);const n=await t.json();return n?.data||[]}catch(e){return f(`[error6]${e.message}`),[]}}(s),n=function(e){return e.toUpperCase().split(/[,+]/).map((e=>e.trim())).filter((e=>e.length>0))}(r);if(0===n.length)return f("[chooseError4]"),p(),void E(!1);let o;if(o=r.includes("+")&&n.length>1?e.filter((e=>n.every((t=>L(e,t))))):e.filter((e=>n.some((t=>L(e,t))))),o.sort(((e,t)=>Number(e.TrainNoLocal)-Number(t.TrainNoLocal))),0===o.length)return f("[chooseError5]"),p(),void E(!1);if(function(e){g();const t=document.getElementById("results");if(!t)return void console.error("[error4]");if(0===e.length)return void f("[error5]");t.innerHTML="";const n=["EU07","EP07","EP08","EP09","E6ACTadb","E6ACTa","E186","ET22","ET25"],o=["EN76","EN96","EN57","EN71","ED250"],r={"EN57-038":"EN57-038","EN57-047":"EN57-038","EN57-206":"EN57-015","EN57-612":"EN57-015","EN57-614":"EN57-614","EN57-650":"EN57-015","EN57-919":"EN57-919","EN57-1000":"EN57-1000","EN57-1003":"EN57-614","EN57-1051":"EN57-009","EN57-1181":"EN57-015","EN57-1219":"EN57-1219","EN57-1316":"EN57-1219","EN57-1331":"EN57-015","EN57-1458":"EN57-1458","EN57-1567":"EN57-1567","EN57-1571":"EN57-1458","EN57-1752":"EN57-1567","EN57-1755":"EN57-1755","EN57-1796":"EN57-1000","EN57-1821":"EN57-1821","EN71-002":"EN57-015","EN71-004":"EN57-015","EN71-005":"EN57-1219","EN71-011":"EN57-009","EN71-015":"EN57-015","EU07-085":"EU07-005","11xa Bc9ou":"11xa_Bc9ou","111A_51 51 20-71 102":"111A_51_51_20-71_102","111A_51 51 20-70 829":"111A_51_51_20-70_829",a9mnouz_61511970234:"a9mnouz_61511970234",b11mnouz_61512170098:"b11mnouz_61512170098",b11mnouz_61512170064:"b11mnouz_61512170064"};e.forEach((e=>{const s=document.createElement("div");s.className="train-card";let c=e.Category||"";const a=e.Line?`${e.Line}`:"",i=e.TrainNoLocal||"",l=e.TrainName||"",d=e.StartStation||"?",u=e.EndStation||"?";let m=0,E=0,p=0;Array.isArray(e.Vehicles)&&e.Vehicles.forEach((e=>{let t=(e.includes("/")?e.split("/").pop():e).split("_")[0];n.some((e=>t.startsWith(e)))?m++:o.some((e=>t.startsWith(e)))?E++:p++}));const h=localStorage.getItem("lang")||"en",v=translations[h]?.compositionText||"Vlak složený z {text}.";function N(e,t,n){return 1===e?`1 ${t}`:`${e} ${n}`}function f(e,t,n){return 1===e?`1 ${t}`:`${e} ${n}`}function g(e,t="cs"){return"en"===t?N(e,"car","cars"):"pl"===t?f(e,"wagonu","wagonów"):1===e?"1 vozu":`${e} vozů`}function y(e,t="cs"){return"en"===t?N(e,"locomotive","locomotives"):"pl"===t?f(e,"lokomotywy","lokomotyw"):1===e?"1 lokomotivy":`${e} lokomotiv`}let $="";if(E>0)$=function(e,t="cs"){return"en"===t?N(e,"unit","units"):"pl"===t?f(e,"zespołu","zespołów"):1===e?"1 jednotky":`${e} jednotek`}(E,h);else if(m>0&&0===p)$=y(m,h);else if(1===m)$=g(p,h);else{const e="pl"===h?"i":"a";$=`${y(m,h)} ${e} ${g(p,h)}`}const k=v.replace("{text}",$);if(s.innerHTML=`\n        <h2>${l} – ${c}${a} (${i})</h2>\n        <p><strong>${d}</strong> ➝ <strong>${u}</strong></p>\n        <p>${k}</p>\n      `,Array.isArray(e.Vehicles)&&e.Vehicles.length>0){const t=document.createElement("div");t.className="vehicles-scroll-wrapper";const n=document.createElement("div");n.className="vehicles-container",e.Vehicles.forEach((e=>{let t=e.replace("/","-"),[o,s]=e.split("/"),c=s?s.split(" ")[0]:e;o&&(t=t||o),c&&(t=c||t);const a=c;let i,l=c;function d(e){return r.hasOwnProperty(e)?r[e]:e}if(l.includes("EN71")&&(o="EN71"),/^11xa\/80s\//.test(e))i="11xa_Bc9ou",l="11xa Bc9ou",o="(1980)";else if(r.hasOwnProperty(a))i=r[a];else if(i=c,c.includes(":")&&(c=c.split(":")[0],i=c,l=c),c.startsWith("ED250")){i="ED250";const e=c.match(/ED250-\d+/);e&&(l=e[0])}else{if(c.includes("_")&&(i=c.split("_")[0],l=i),c.includes("brazowy")&&(i=c.split(":")[0]),/^412W\//.test(e)){const t=e.match(/^412W\/412W_v\d+_(\d+)(?:-[\d]+)?(_b)?/);if(t){let e=t[1],n=t[2]||"";n=n.replace("_",""),i=d(`412W_${e}${n}`),l="412W"}else{const t=e.match(/412W\/([^:-]+)-/);t&&(i=d(t[1]),l="412W")}}if(/^11xa\//.test(e)){const t=e.match(/^11xa\/([^:-]+-[^:-]+)-/);t&&(i=t[1].replace(/ /g,"_"))}if(c.includes("406Ra")&&(i=d(c.split("-")[0])),/^441V\//.test(e)){const t=e.match(/441V\/([^:-]+)-/);t&&(i=d(t[1]),l="441V")}if(/^Z2\//.test(e)){const t=e.match(/Z2\/([^:-]+)-/);t&&(i=d(t[1]))}}let u="";if(e.includes("@")){const t=e.split("@")[1].split(" ")[0],n=translations[h]?.cargoNames?.[t];u=n?` / ${n}`:""}const m=o?o.replace(/([a-zA-Z]+)(\d+)/,((e,t,n)=>t+n)):"",E=l.charAt(0).toUpperCase()+l.slice(1),p=r.hasOwnProperty(a)?r[a]:E,v=document.createElement("div");v.className="vehicle",v.innerHTML=`\n            <img src="vehicles/${i}.png" title="${p}" />\n            <div class="vehicle-number">${E}</div>\n            <div class="vehicle-nickname">${m}${u}</div>\n          `,n.appendChild(v)})),t.appendChild(n),s.appendChild(t)}t.appendChild(s)}))}(o),!t)if(1===n.length){const e=n[0];/[A-Z]/.test(e)&&/[A-Z]/i.test(e.replace(/[0-9\s\-+,]/g,""))?$(`"${e.toUpperCase()}"`):$(e.toUpperCase())}else $(r.toUpperCase());E(!0),p()}catch(e){f(`[error1]${e.message}`),E(!1)}}function L(e,t){const n=t.trim().toUpperCase();if(function(e){if((e=e.trim()).includes("-")){const[t,n]=e.split("-").map(Number);return isNaN(t)||isNaN(n)||t>n?[]:Array.from({length:n-t+1},((e,n)=>String(t+n)))}return[e]}(n).includes(String(e.TrainNoLocal)))return!0;const o=e.TrainName.toUpperCase();return!!o.split(/[\s\-]+/).includes(n)||(!!o.includes(n)||!(!Array.isArray(e.Vehicles)||!e.Vehicles.some((e=>e.toUpperCase().includes(n)))))}N(v),r.addEventListener("click",(()=>{v=!v,N(v)})),localStorage.getItem("cookiesAccepted")||(s.classList.remove("hidden"),c.addEventListener("click",(()=>{s.classList.add("hidden"),localStorage.setItem("cookiesAccepted","true")}))),fetch("https://panel.simrail.eu:8084/servers-open").then((e=>e.json())).then((e=>{e.data.filter((e=>e.IsActive)).forEach((e=>{const t=document.createElement("option");t.value=e.ServerCode,t.textContent=e.ServerName,o.appendChild(t)})),o.value=localStorage.getItem("selectedServer")||""})).catch((e=>console.error("[error2]",e))),o.addEventListener("change",(()=>{localStorage.setItem("selectedServer",o.value)})),p()})),document.getElementById("noCookiesBtn").addEventListener("click",(e=>{e.preventDefault(),deleteAllCookies(),location.reload()}));
+document.addEventListener('DOMContentLoaded', () => {
+  const trainSearch = document.getElementById('trainSearch');
+  const searchBtn = document.getElementById('searchBtn');
+  const results = document.getElementById('results');
+  const serverSelect = document.getElementById('serverSelect');
+  const toggleDark = document.getElementById('toggleDarkMode');
+  const popup = document.getElementById('popup');
+  const acceptCookies = document.getElementById('acceptCookies');
+  const homeBtn = document.getElementById('homeBtn');
+  const headerText = document.getElementById('headerText');
+
+  const miniHeader = document.getElementById('miniHeader');
+  const miniTrainSearch = document.getElementById('miniTrainSearch');
+  const miniSearchBtn = document.getElementById('miniSearchBtn');
+  const miniBackBtn = document.getElementById('miniBackBtn');
+
+  window.addEventListener('scroll', () => {
+    const scrollThreshold = 150;
+    const maxScroll = 500;
+    const scrollY = window.scrollY;
+
+    if (scrollY <= scrollThreshold) {
+      miniHeader.style.transform = 'translateX(-50%) translateY(-100%)';
+      miniHeader.classList.add('hidden');
+    } else {
+      miniHeader.classList.remove('hidden');
+
+      if (scrollY >= maxScroll) {
+        miniHeader.style.transform = 'translateX(-50%) translateY(0)';
+      } else {
+        const progress = (scrollY - scrollThreshold) / (maxScroll - scrollThreshold);
+        const translateY = -100 + (progress * 100);
+        miniHeader.style.transform = `translateX(-50%) translateY(${translateY}%)`;
+      }
+    }
+  });
+
+  trainSearch.addEventListener('input', () => {
+    miniTrainSearch.value = trainSearch.value;
+  });
+  miniTrainSearch.addEventListener('input', () => {
+    trainSearch.value = miniTrainSearch.value;
+  });
+
+  miniSearchBtn.addEventListener('click', () => {
+    handleSearch(false);
+  });
+  searchBtn.addEventListener('click', () => {
+    handleSearch(false);
+  });
+
+  // Mini header - enter
+  miniTrainSearch.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      handleSearch(false);
+    }
+  });
+
+  // mini header - zpet
+  miniBackBtn.addEventListener('click', () => {
+    document.querySelectorAll('.train-card').forEach(card => card.remove());
+    clearError();
+    trainSearch.value = '';
+    miniTrainSearch.value = '';
+    renderLastSearches();
+    setBackButtonVisible(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+
+  function setBackButtonVisible(visible) {
+    homeBtn.classList.toggle('hidden', !visible);
+  }
+
+  setBackButtonVisible(false);
+
+  searchBtn.addEventListener('click', () => handleSearch(false));
+  trainSearch.addEventListener('keydown', e => {
+    if (e.key === 'Enter') handleSearch(false);
+  });
+
+  function attachHistoryClickHandlers() {
+    const lastSearchButtons = document.querySelectorAll('#lastSearchesList button');
+    lastSearchButtons.forEach(btn => {
+      btn.addEventListener('click', () => setBackButtonVisible(true));
+    });
+  }
+
+  function renderLastSearches() {
+    const last = getLastSearches();
+    if (!last.length) return;
+
+    const oldList = document.getElementById('lastSearchesList');
+    if (oldList) oldList.remove();
+
+    const container = document.createElement('div');
+    container.id = 'lastSearchesList';
+    container.style.marginTop = '2rem';
+
+    const title = document.createElement('h3');
+    title.textContent = '[historySection]';
+    container.appendChild(title);
+
+    last.forEach(query => {
+      const btn = document.createElement('button');
+      const isTrainName = /[A-Z]/.test(query) && /[A-Z]/i.test(query.replace(/[0-9\s\-+,]/g, ''));
+      btn.textContent = isTrainName ? `"${query}"` : query;
+      btn.style.marginRight = '0.5rem';
+      btn.addEventListener('click', () => {
+        trainSearch.value = query;
+        if (serverSelect.value) handleSearch(true);
+      });
+      container.appendChild(btn);
+    });
+
+    results.appendChild(container);
+  }
+
+  const originalRenderLastSearches = renderLastSearches;
+  renderLastSearches = function() {
+    originalRenderLastSearches();
+    attachHistoryClickHandlers();
+  };
+
+  homeBtn.addEventListener('click', () => {
+    document.querySelectorAll('.train-card').forEach(card => card.remove());
+    clearError();
+    trainSearch.value = '';
+    renderLastSearches();
+    setBackButtonVisible(false);
+  });
+
+  headerText.addEventListener('click', () => {
+    document.querySelectorAll('.train-card').forEach(card => card.remove());
+    clearError();
+    trainSearch.value = '';
+    renderLastSearches();
+    setBackButtonVisible(false);
+  });
+
+  trainSearch.value = '';
+  let darkMode = localStorage.getItem('darkMode') === 'true';
+
+  function applyDarkMode(state) {
+    document.body.classList.toggle('dark', state);
+    toggleDark.textContent = state ? '🌙' : '☀️';
+    localStorage.setItem('darkMode', state);
+  }
+  applyDarkMode(darkMode);
+
+  toggleDark.addEventListener('click', () => {
+    darkMode = !darkMode;
+    applyDarkMode(darkMode);
+  });
+
+  if (!localStorage.getItem('cookiesAccepted')) {
+    popup.classList.remove('hidden');
+    acceptCookies.addEventListener('click', () => {
+      popup.classList.add('hidden');
+      localStorage.setItem('cookiesAccepted', 'true');
+    });
+  }
+
+  fetch('https://panel.simrail.eu:8084/servers-open')
+    .then(res => res.json())
+    .then(data => {
+      data.data.filter(s => s.IsActive).forEach(server => {
+        const opt = document.createElement('option');
+        opt.value = server.ServerCode;
+        opt.textContent = server.ServerName;
+        serverSelect.appendChild(opt);
+      });
+      serverSelect.value = localStorage.getItem('selectedServer') || '';
+    })
+    .catch(err => console.error('[error2]', err));
+
+  serverSelect.addEventListener('change', () => {
+    localStorage.setItem('selectedServer', serverSelect.value);
+  });
+
+  // rozsahy a oddelene hodnoty
+  function expandRanges(input) {
+    input = input.trim();
+    if (input.includes('-')) {
+      const [start, end] = input.split('-').map(Number);
+      if (isNaN(start) || isNaN(end) || start > end) return [];
+      return Array.from({ length: end - start + 1 }, (_, i) => String(start + i));
+    }
+    return [input];
+  }
+
+  function parseInput(input) {
+    // carky a plusy
+    const parts = input.toUpperCase().split(/[,+]/).map(p => p.trim()).filter(p => p.length > 0);
+    return parts;
+  }
+
+  function showLoading() {
+    clearError();
+    results.innerHTML = '<p>[error3]</p>';
+  }
+
+  function showError(msg) {
+    results.innerHTML = `<div class="error-box">❌ ${msg}</div>`;
+  }
+
+  function clearError() {
+    const errorBox = results.querySelector('.error-box');
+    if (errorBox) errorBox.remove();
+  }
+
+
+  function renderTrains(trains) {
+    clearError();
+    const results = document.getElementById('results');
+    if (!results) {
+      console.error('[error4]');
+      return;
+    }
+    if (trains.length === 0) {
+      showError('[error5]');
+      return;
+    }
+    results.innerHTML = '';
+
+    const locomotivesList = ['EU07', 'EP07', 'EP08', 'EP09', 'E6ACTadb', 'E6ACTa', 'E186', 'ET22', 'ET25'];
+    const unitsList = ['EN76', 'EN96', 'EN57', 'EN71', 'ED250'];
+
+    const vehicleImageMap = {
+      // 'EN57-009': 'EN57-009',
+      'EN57-038': 'EN57-038',
+      'EN57-047': 'EN57-038',
+      'EN57-206': 'EN57-015',
+      'EN57-612': 'EN57-015',
+      'EN57-614': 'EN57-614',
+      'EN57-650': 'EN57-015',
+      'EN57-919': 'EN57-919',
+      'EN57-1000': 'EN57-1000',
+      'EN57-1003': 'EN57-614',
+      'EN57-1051': 'EN57-009',
+      'EN57-1181': 'EN57-015',
+      'EN57-1219': 'EN57-1219',
+      'EN57-1316': 'EN57-1219',
+      'EN57-1331': 'EN57-015',
+      'EN57-1458': 'EN57-1458',
+      'EN57-1567': 'EN57-1567',
+      'EN57-1571': 'EN57-1458',
+      'EN57-1752': 'EN57-1567',
+      'EN57-1755': 'EN57-1755',
+      'EN57-1796': 'EN57-1000',
+      'EN57-1821': 'EN57-1821',
+      'EN71-002': 'EN57-015',
+      'EN71-004': 'EN57-015',
+      'EN71-005': 'EN57-1219',
+      'EN71-011': 'EN57-009',
+      'EN71-015': 'EN57-015',
+      // 'EN76-006': 'EN76-006',
+      // 'EN76-022': 'EN76-022',
+      // 'EN96-001': 'EN96-001',
+      // 'ET25-002': 'ET25-002',
+      // 'E6ACTa-014': 'E6ACTa-014',
+      // 'E6ACTa-016': 'E6ACTa-016',
+      // 'E6ACTadb-027': 'E6ACTadb-027',
+      // 'E186-134': 'E186-134',
+      // 'E186-929': 'E186-929',
+      // 'EU07-005': 'EU07-005',
+      // 'EU07-068': 'EU07-068',
+      // 'EU07-070': 'EU07-070',
+      'EU07-085': 'EU07-005',
+      // 'EU07-092': 'EU07-092',
+      // 'EU07-096': 'EU07-096',
+      // 'EU07-153': 'EU07-153',
+      // 'EU07-193': 'EU07-193',
+      // 'EU07-241': 'EU07-241',
+      // 'EP07-135': 'EP07-135',
+      // 'EP07-174': 'EP07-174',
+      // 'ET22-243': 'ET22-243',
+      // 'ET22-256': 'ET22-256',
+      // 'ET22-644': 'ET22-644',
+      // 'ET22-836': 'ET22-836',
+      // 'ET22-911': 'ET22-911',
+      // 'ET22-1163': 'ET22-1163',
+      // 'EP08-001': 'EP08-001',
+      // 'EP08-008': 'EP08-008',
+      // 'EP08-013': 'EP08-013',
+      // '230-01': '230-01',
+       // zajebane 406Ra/Rb
+       // '406Ra_34517981215': '406Ra_34517981215', // cervene 7981 215
+       // '406Ra_33510079375': '406Ra_33510079375', // seda 0079 375
+       // '406Ra_33517980031': '406Ra_33517980031', // bila 7980 031
+       // '406Ra_33517881520': '406Ra_33517881520', // modra 7881 520
+       // '406Ra_33517982861': '406Ra_33517982861', // bila s cervenym logem 7982 861
+       // '406Ra_33517982861': '406Ra_33517982861', // bila s cervenym logem 7982 861
+      // '406Rb': '406Rb',
+       // normalni vozy
+      // '408S': '408S',
+       // zajebane 412W
+      // '412W_364': '412W_364',
+      // '412W_364b': '412W_364b',
+      // '412W_33515356394': '412W_33515356394', // zelena 5356 349 
+      // '412W_33565300118': '412W_33565300118', // ZOS Zvolen 5300 118
+      // '412W_33565300177': '412W_33565300177', // Zos Zvolen 5300 177
+       // brazowy
+      // '424Z': '424Z',
+      // '424Z_brazowy': '424Z_brazowy',
+       // pisek
+       //'441V_31516635283': '441V_31516635283', // modry
+      // '441V_31516635512': '441V_31516635512', // hnedy
+       // 629Z
+      // '629Z': '629Z',
+       // osobni vozy
+      '11xa Bc9ou': '11xa_Bc9ou',
+      '111A_51 51 20-71 102': '111A_51_51_20-71_102',
+      '111A_51 51 20-70 829': '111A_51_51_20-70_829',
+      'a9mnouz_61511970234': 'a9mnouz_61511970234',
+      'b11mnouz_61512170098': 'b11mnouz_61512170098',
+      'b11mnouz_61512170064': 'b11mnouz_61512170064',
+    };
+
+    trains.forEach(train => {
+      const container = document.createElement('div');
+      container.className = 'train-card';
+
+      let category = train.Category || '';
+      const line = train.Line ? `${train.Line}` : '';
+      const trainNo = train.TrainNoLocal || '';
+      const trainName = train.TrainName || '';
+
+      const startStation = train.StartStation || '?';
+      const endStation = train.EndStation || '?';
+
+      // slozeni
+      let locos = 0, units = 0, cars = 0;
+      if (Array.isArray(train.Vehicles)) {
+        train.Vehicles.forEach(v => {
+          let namePart = v.includes('/') ? v.split('/').pop() : v;
+          let baseName = namePart.split('_')[0];
+
+          if (locomotivesList.some(loco => baseName.startsWith(loco))) locos++;
+          else if (unitsList.some(unit => baseName.startsWith(unit))) units++;
+          else cars++;
+        });
+      }
+
+      // Sklonování
+      const lang = localStorage.getItem('lang') || 'en';
+      const template = translations[lang]?.compositionText || "Vlak složený z {text}.";
+
+      function pluralizeEnglish(count, singular, plural) {
+        return count === 1 ? `1 ${singular}` : `${count} ${plural}`;
+      }
+
+      function pluralizePolish(count, singularGen, pluralGen) {
+        return count === 1 ? `1 ${singularGen}` : `${count} ${pluralGen}`;
+      }
+
+      function sklonovaniVozy(pocet, lang = 'cs') {
+        if (lang === 'en') return pluralizeEnglish(pocet, 'car', 'cars');
+        if (lang === 'pl') return pluralizePolish(pocet, 'wagonu', 'wagonów');
+
+        if (pocet === 1) return '1 vozu';
+        if (pocet >= 2 && pocet <= 4) return `${pocet} vozů`;
+        return `${pocet} vozů`;
+      }
+
+      function sklonovaniLokomotiv(pocet, lang = 'cs') {
+        if (lang === 'en') return pluralizeEnglish(pocet, 'locomotive', 'locomotives');
+        if (lang === 'pl') return pluralizePolish(pocet, 'lokomotywy', 'lokomotyw');
+
+        if (pocet === 1) return '1 lokomotivy';
+        if (pocet >= 2 && pocet <= 4) return `${pocet} lokomotiv`;
+        return `${pocet} lokomotiv`;
+      }
+
+      function sklonovaniJednotek(pocet, lang = 'cs') {
+        if (lang === 'en') return pluralizeEnglish(pocet, 'unit', 'units');
+        if (lang === 'pl') return pluralizePolish(pocet, 'zespołu', 'zespołów');
+
+        if (pocet === 1) return '1 jednotky';
+        if (pocet >= 2 && pocet <= 4) return `${pocet} jednotek`;
+        return `${pocet} jednotek`;
+      }
+
+      let textToInsert = '';
+      if (units > 0) {
+        textToInsert = sklonovaniJednotek(units, lang);
+      } else if (locos > 0 && cars === 0) {
+        textToInsert = sklonovaniLokomotiv(locos, lang);
+      } else if (locos === 1) {
+        textToInsert = sklonovaniVozy(cars, lang);
+      } else {
+        const conjunction = lang === 'pl' ? 'i' : 'a';
+        textToInsert = `${sklonovaniLokomotiv(locos, lang)} ${conjunction} ${sklonovaniVozy(cars, lang)}`;
+      }
+
+      const compositionText = template.replace("{text}", textToInsert);
+
+
+
+
+
+
+
+      container.innerHTML = `
+        <h2>${trainName} – ${category}${line} (${trainNo})</h2>
+        <p><strong>${startStation}</strong> ➝ <strong>${endStation}</strong></p>
+        <p>${compositionText}</p>
+      `;
+
+      // Vozidla
+      if (Array.isArray(train.Vehicles) && train.Vehicles.length > 0) {
+        const vehicleElements = document.createElement('div');
+        vehicleElements.className = 'vehicles-scroll-wrapper';
+
+        const vehiclesContainer = document.createElement('div');
+        vehiclesContainer.className = 'vehicles-container';
+
+        train.Vehicles.forEach(vehicle => {
+          let fullVehicleStringOriginal = vehicle;
+          let fullVehicleStringFormatted = fullVehicleStringOriginal.replace('/', '-');
+          let [nickname, fullNameWithRest] = vehicle.split('/');
+          let fullName = fullNameWithRest ? fullNameWithRest.split(' ')[0] : vehicle;
+          if (nickname) {
+            fullVehicleStringFormatted = fullVehicleStringFormatted || nickname;
+          }
+          if (fullName) {
+            fullVehicleStringFormatted = fullName || fullVehicleStringFormatted;
+          }
+
+          const originalFullName = fullName; // pro mapovani obrazku apod.
+
+          let vehicleNumberText = fullName;
+          let imgName;
+          function getFallbackImgName(fallbackName) {
+            return vehicleImageMap.hasOwnProperty(fallbackName) ? vehicleImageMap[fallbackName] : fallbackName;
+          }
+          // bo SimKol
+          if (vehicleNumberText.includes('EN71')) {
+            nickname = 'EN71';
+          }
+          if (/^11xa\/80s\//.test(vehicle)) {
+            imgName = '11xa_Bc9ou';
+            vehicleNumberText = '11xa Bc9ou';
+            nickname = '(1980)';
+          } else if (vehicleImageMap.hasOwnProperty(originalFullName)) {
+            imgName = vehicleImageMap[originalFullName];
+          } else {
+            imgName = fullName;
+            if (fullName.includes(':')) {
+              fullName = fullName.split(':')[0];
+              imgName = fullName;
+              vehicleNumberText = fullName;
+            }
+
+            if (fullName.startsWith('ED250')) {
+              imgName = 'ED250';
+              const match = fullName.match(/ED250-\d+/);
+              if (match) vehicleNumberText = match[0];
+            } else {
+              if (fullName.includes('_')) {
+                imgName = fullName.split('_')[0];
+                vehicleNumberText = imgName;
+              }
+              if (fullName.includes('brazowy')) {
+                imgName = fullName.split(':')[0];
+              }
+              if (/^412W\//.test(vehicle)) {
+                const match = vehicle.match(/^412W\/412W_v\d+_(\d+)(?:-[\d]+)?(_b)?/);
+                if (match) {
+                  let number = match[1];
+                  let suffix = match[2] || '';
+                  suffix = suffix.replace('_', '');
+                  imgName = getFallbackImgName(`412W_${number}${suffix}`);
+                  vehicleNumberText = "412W";
+                } else {
+                  const fallbackMatch = vehicle.match(/412W\/([^:-]+)-/);
+                  if (fallbackMatch) {
+                    imgName = getFallbackImgName(fallbackMatch[1]);
+                    vehicleNumberText = "412W";
+                  }
+                }
+              }
+              if (/^11xa\//.test(vehicle)) {
+                const match11xa = vehicle.match(/^11xa\/([^:-]+-[^:-]+)-/);
+                if (match11xa) {
+                  imgName = match11xa[1].replace(/ /g, '_');
+                }
+              }
+              if (fullName.includes('406Ra')) {
+                imgName = getFallbackImgName(fullName.split('-')[0]);
+              }
+              if (/^441V\//.test(vehicle)) {
+                const match441V = vehicle.match(/441V\/([^:-]+)-/);
+                if (match441V) {
+                  imgName = getFallbackImgName(match441V[1]);
+                  vehicleNumberText = "441V";
+                }
+              }
+              if (/^Z2\//.test(vehicle)) {
+                const matchZ2 = vehicle.match(/Z2\/([^:-]+)-/);
+                if (matchZ2) {
+                  imgName = getFallbackImgName(matchZ2[1]);
+                }
+              }
+            }
+          }
+
+
+
+          let loadText = '';
+          if (vehicle.includes('@')) {
+            const loadPart = vehicle.split('@')[1].split(' ')[0];
+            const translatedCargo = translations[lang]?.cargoNames?.[loadPart];
+            loadText = translatedCargo ? ` / ${translatedCargo}` : '';
+          }
+
+          // Bo SimKol - pokud je tam EN, nerozděluj ho mezerou a zapis nickname jako name
+          const displayNickname = nickname ? nickname.replace(/([a-zA-Z]+)(\d+)/, (_, p1, p2) => {
+            if (p1 === 'EN' || "Z2") return p1 + p2;
+            return p1 + ' ' + p2;
+          }) : '';
+          const vehicleNumberCapitalized = vehicleNumberText.charAt(0).toUpperCase() + vehicleNumberText.slice(1);
+          const titleText = vehicleImageMap.hasOwnProperty(originalFullName) ? vehicleImageMap[originalFullName] : vehicleNumberCapitalized;
+
+          const vehicleDiv = document.createElement('div');
+          vehicleDiv.className = 'vehicle';
+          vehicleDiv.innerHTML = `
+            <img src="vehicles/${imgName}.png" title="${titleText}" />
+            <div class="vehicle-number">${vehicleNumberCapitalized}</div>
+            <div class="vehicle-nickname">${displayNickname}${loadText}</div>
+          `;
+          vehiclesContainer.appendChild(vehicleDiv);
+        });
+
+        vehicleElements.appendChild(vehiclesContainer);
+        container.appendChild(vehicleElements);
+      }
+
+
+      results.appendChild(container);
+    });
+  }
+
+
+
+
+  async function fetchTrainData(serverCode) {
+    try {
+      const res = await fetch(`https://panel.simrail.eu:8084/trains-open?serverCode=${serverCode}`);
+      if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+      const json = await res.json();
+      return json?.data || [];
+    } catch (e) {
+      showError(`[error6]${e.message}`);
+      return [];
+    }
+  }
+
+  function getLastSearches() {
+    const match = document.cookie.match(/(?:^|; )lastSearches=([^;]+)/);
+    return match ? match[1].split(',') : [];
+  }
+
+  function saveLastSearches(query) {
+    // Normalizuj query pro ukládání velkými písmeny a bez uvozovek
+    query = query.toUpperCase().replace(/^"(.*)"$/, '$1').trim();
+    let last = getLastSearches().filter(item => item.toUpperCase() !== query);
+    last.unshift(query);
+    if (last.length > 10) last.pop();
+    document.cookie = `lastSearches=${last.join(',')}; path=/; max-age=${60 * 60 * 24 * 365}`;
+  }
+
+
+
+  async function handleSearch(fromHistory = false) {
+    let input = trainSearch.value.trim();
+    const serverCode = serverSelect.value;
+
+    clearError();
+
+    if (!serverCode && !input) {
+      showError('[chooseError1]');
+      renderLastSearches();
+      setBackButtonVisible(false);
+      return;
+    }
+    if (!serverCode) {
+      showError('[chooseError2]');
+      renderLastSearches();
+      setBackButtonVisible(false);
+      return;
+    }
+    if (!input) {
+      showError('[chooseError3]');
+      renderLastSearches();
+      setBackButtonVisible(false);
+      return;
+    }
+
+    showLoading();
+
+    try {
+      const allData = await fetchTrainData(serverCode);
+      const filters = parseInput(input); // rozdělení podle čárek, plusů, rozsahů atd.
+
+      if (filters.length === 0) {
+        showError('[chooseError4]');
+        renderLastSearches();
+        setBackButtonVisible(false);
+        return;
+      }
+
+      let filteredTrains;
+
+      // AND hledání
+      const isAndSearch = input.includes('+') && filters.length > 1;
+
+      if (isAndSearch) {
+        filteredTrains = allData.filter(train =>
+          filters.every(f => trainMatchesFilter(train, f))
+        );
+      } else {
+        // OR hledani
+        filteredTrains = allData.filter(train =>
+          filters.some(f => trainMatchesFilter(train, f))
+        );
+      }
+
+      // Serazeni vzestupne
+      filteredTrains.sort((a, b) => Number(a.TrainNoLocal) - Number(b.TrainNoLocal));
+
+      if (filteredTrains.length === 0) {
+        showError('[chooseError5]');
+        renderLastSearches();
+        setBackButtonVisible(false);
+        return; // nic neukladej
+      }
+
+      renderTrains(filteredTrains);
+
+      // Posledni hledani validni - uloz ho
+      if (!fromHistory) {
+        if (filters.length === 1) {
+          const single = filters[0];
+          if (/[A-Z]/.test(single) && /[A-Z]/i.test(single.replace(/[0-9\s\-+,]/g, ''))) {
+            saveLastSearches(`"${single.toUpperCase()}"`);
+          } else {
+            saveLastSearches(single.toUpperCase());
+          }
+        } else {
+          saveLastSearches(input.toUpperCase());
+        }
+      }
+
+      setBackButtonVisible(true);
+      renderLastSearches();
+
+    } catch (e) {
+      showError(`[error1]${e.message}`);
+      setBackButtonVisible(false);
+    }
+  }
+
+
+  function trainMatchesFilter(train, filterRaw) {
+    const filter = filterRaw.trim().toUpperCase();
+
+    // cislo nebo rozsah
+    const numbers = expandRanges(filter);
+    if (numbers.includes(String(train.TrainNoLocal))) return true;
+
+    const trainNameUpper = train.TrainName.toUpperCase();
+
+    // vlaky a linky
+    const trainNameWords = trainNameUpper.split(/[\s\-]+/);
+
+    // jmeno vlaku
+    if (trainNameWords.includes(filter)) return true;
+    if (trainNameUpper.includes(filter)) return true;
+
+
+    // vozidla
+    if (Array.isArray(train.Vehicles) && train.Vehicles.some(v => v.toUpperCase().includes(filter))) return true;
+
+    return false;
+  }
+
+  renderLastSearches();
+});
+
+
+function deleteAllCookies() {
+  document.cookie.split(';').forEach(cookie => {
+    const eqPos = cookie.indexOf('=');
+    const name = eqPos > -1 ? cookie.substring(0, eqPos) : cookie;
+    document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
+  });
+}
+
+document.getElementById('noCookiesBtn').addEventListener('click', (e) => {
+  e.preventDefault();
+  deleteAllCookies();
+  location.reload();
+});
