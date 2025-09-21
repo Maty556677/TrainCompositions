@@ -23,6 +23,8 @@ const translations = {
     chooseError3: "Zadej číslo vlaku.",
     chooseError4: "Neplatný formát čísla nebo rozsahu.",
     chooseError5: "Nenalezeny žádné vlaky.",
+    SimRail: "SimRail - Řazení vlaků",
+    liveMap: "Sledovat na živé mapě",
     // Cargo
     cargoNames: {
       Concrete_slab: 'Betonová deska',
@@ -73,6 +75,8 @@ const translations = {
     chooseError3: "Enter train number.",
     chooseError4: "Invalid number or range format.",
     chooseError5: "No trains found.",
+    SimRail: "SimRail - Train Compositions",
+    liveMap: "Watch on live map",
     // Cargo
     cargoNames: {
       Concrete_slab: 'Concrete slab',
@@ -124,6 +128,8 @@ const translations = {
     chooseError3: "Podaj numer pociągu.",
     chooseError4: "Nieprawidłowy format numeru lub zakresu.",
     chooseError5: "Nie znaleziono żadnych pociągów.",
+    SimRail: "SimRail - Składy pociągów",
+    liveMap: "Zobacz na mapie",
     // Cargo
     cargoNames: {
       Concrete_slab: 'Płyta betonowa',

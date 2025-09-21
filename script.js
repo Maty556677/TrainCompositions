@@ -402,7 +402,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
       container.innerHTML = `
-        <h2>${trainName} – ${category}${line} (${trainNo})</h2>
+        <h2>${trainName} – ${category}${line} (${trainNo})<a href="https://www.simrail-edr.de/livemap" target="_blank" class="live-dot" title="[liveMap]"></a></h2>
         <p><strong>${startStation}</strong> ➝ <strong>${endStation}</strong></p>
         <p>${compositionText}</p>
       `;
@@ -437,6 +437,15 @@ document.addEventListener('DOMContentLoaded', () => {
           // bo SimKol
           if (vehicleNumberText.includes('EN71')) {
             nickname = 'EN71';
+          }
+          if (vehicleNumberText.includes('434Z')) {
+            nickname = '434Z';
+          }
+          if (vehicleNumberText.includes('406Rb')) {
+            nickname = '406Rb';
+          }
+          if (vehicleNumberText.includes('230-01')) {
+            nickname = '230-01';
           }
           if (/^11xa\/80s\//.test(vehicle)) {
             imgName = '11xa_Bc9ou';
