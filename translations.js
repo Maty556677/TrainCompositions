@@ -11,7 +11,7 @@ const translations = {
     footer1: `        | SimRail - Řazení vlaků | Obrázky z `,
     footer2: ` a `,
     footer3: "Vymazat poslední hledání",
-    compositionText: "Vlak složený z {text}.",
+    compositionText: "Souprava složená z {text}.",
     error1: "Chyba při zpracování: ",
     error2: "Chyba při načítání seznamu serverů: ",
     error3: "⏳ Načítání vlaků z API...",
