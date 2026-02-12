@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     results.innerHTML = '';
 
-    const locomotivesList = ['EU07', 'EP07', 'EP08', 'EP09', 'E6ACTadb', 'E6ACTa', 'E186', 'ET22', 'ET25'];
+    const locomotivesList = ['EU07', 'EP07', 'EP08', 'EP09', 'E6ACTadb', 'E6ACTa', 'E186', 'ET22', 'ET25', '163'];
     const unitsList = ['EN76', 'EN96', 'EN57', 'EN71', 'ED250'];
 
     const vehicleImageMap = {
@@ -284,37 +284,48 @@ document.addEventListener('DOMContentLoaded', () => {
       // 'EP08-008': 'EP08-008',
       // 'EP08-013': 'EP08-013',
       // '230-01': '230-01',
-       // zajebane 406Ra/Rb
-       // '406Ra_34517981215': '406Ra_34517981215', // cervene 7981 215
-       // '406Ra_33510079375': '406Ra_33510079375', // seda 0079 375
-       // '406Ra_33517980031': '406Ra_33517980031', // bila 7980 031
-       // '406Ra_33517881520': '406Ra_33517881520', // modra 7881 520
-       // '406Ra_33517982861': '406Ra_33517982861', // bila s cervenym logem 7982 861
-       // '406Ra_33517982861': '406Ra_33517982861', // bila s cervenym logem 7982 861
+      // zajebane 406Ra/Rb
+      // '406Ra_34517981215': '406Ra_34517981215', // cervene 7981 215
+      // '406Ra_33510079375': '406Ra_33510079375', // seda 0079 375
+      // '406Ra_33517980031': '406Ra_33517980031', // bila 7980 031
+      // '406Ra_33517881520': '406Ra_33517881520', // modra 7881 520
+      // '406Ra_33517982861': '406Ra_33517982861', // bila s cervenym logem 7982 861
+      // '406Ra_33517982861': '406Ra_33517982861', // bila s cervenym logem 7982 861
       // '406Rb': '406Rb',
-       // normalni vozy
+      // normalni vozy
       // '408S': '408S',
-       // zajebane 412W
+      // zajebane 412W
       // '412W_364': '412W_364',
       // '412W_364b': '412W_364b',
       // '412W_33515356394': '412W_33515356394', // zelena 5356 349 
       // '412W_33565300118': '412W_33565300118', // ZOS Zvolen 5300 118
       // '412W_33565300177': '412W_33565300177', // Zos Zvolen 5300 177
-       // brazowy
+      // brazowy
       // '424Z': '424Z',
       // '424Z_brazowy': '424Z_brazowy',
-       // pisek
-       //'441V_31516635283': '441V_31516635283', // modry
+      // pisek
+      //'441V_31516635283': '441V_31516635283', // modry
       // '441V_31516635512': '441V_31516635512', // hnedy
-       // 629Z
+      // 629Z
       // '629Z': '629Z',
-       // osobni vozy
+      // osobni vozy
       '11xa Bc9ou': '11xa_Bc9ou',
       '111A_51 51 20-71 102': '111A_51_51_20-71_102',
       '111A_51 51 20-70 829': '111A_51_51_20-70_829',
       'a9mnouz_61511970234': 'a9mnouz_61511970234',
       'b11mnouz_61512170098': 'b11mnouz_61512170098',
       'b11mnouz_61512170064': 'b11mnouz_61512170064',
+      '163 021-9': '163 021-9',
+      '163 029-2': '163 029-2',
+      '163 030-0': '163 030-0',
+      '163 034-2': '163 034-2',
+      '163 035-9': '163 035-9',
+      '163 040-0': '163 029-2',
+      '163 041-7': '163 041-7',
+      '163 042-5': '163 042-5',
+      '163 043-3': '163 034-2',
+      '163 045-8': '163 034-2',
+      '163 046-6': '163 034-2',
     };
 
     trains.forEach(train => {
@@ -447,7 +458,16 @@ document.addEventListener('DOMContentLoaded', () => {
           if (vehicleNumberText.includes('230-01')) {
             nickname = '230-01';
           }
-          if (/^11xa\/80s\//.test(vehicle)) {
+          if (vehicle.startsWith('CD163/')) {
+            const match = vehicle.match(/CD163\/(.+?):/);
+            if (match) {
+              const extracted = match[1];
+              const vehicleNumber = extracted.replace(/_/g, ' ');
+              imgName = vehicleImageMap[vehicleNumber] || extracted;
+              vehicleNumberText = vehicleNumber;
+              nickname = 'ČD 163';
+            }
+          } else if (/^11xa\/80s\//.test(vehicle)) {
             imgName = '11xa_Bc9ou';
             vehicleNumberText = '11xa Bc9ou';
             nickname = '(1980)';
