@@ -284,7 +284,6 @@ document.addEventListener('DOMContentLoaded', () => {
       // 'EP08-008': 'EP08-008',
       // 'EP08-013': 'EP08-013',
       // '230-01': '230-01',
-      // zajebane 406Ra/Rb
       // '406Ra_34517981215': '406Ra_34517981215', // cervene 7981 215
       // '406Ra_33510079375': '406Ra_33510079375', // seda 0079 375
       // '406Ra_33517980031': '406Ra_33517980031', // bila 7980 031
@@ -294,7 +293,6 @@ document.addEventListener('DOMContentLoaded', () => {
       // '406Rb': '406Rb',
       // normalni vozy
       // '408S': '408S',
-      // zajebane 412W
       // '412W_364': '412W_364',
       // '412W_364b': '412W_364b',
       // '412W_33515356394': '412W_33515356394', // zelena 5356 349 
@@ -315,17 +313,17 @@ document.addEventListener('DOMContentLoaded', () => {
       'a9mnouz_61511970234': 'a9mnouz_61511970234',
       'b11mnouz_61512170098': 'b11mnouz_61512170098',
       'b11mnouz_61512170064': 'b11mnouz_61512170064',
-      '163 021-9': '163 021-9',
-      '163 029-2': '163 029-2',
-      '163 030-0': '163 030-0',
-      '163 034-2': '163 034-2',
-      '163 035-9': '163 035-9',
-      '163 040-9': '163 029-2',
-      '163 041-7': '163 041-7',
-      '163 042-5': '163 042-5',
-      '163 043-3': '163 034-2',
-      '163 045-8': '163 034-2',
-      '163 046-6': '163 034-2',
+      '163_021-9': '163 021-9',
+      '163_029-2': '163 029-2',
+      '163_030-0': '163 030-0',
+      '163_034-2': '163 034-2',
+      '163_035-9': '163 035-9',
+      '163_040-9': '163 029-2',
+      '163_041-7': '163 041-7',
+      '163_042-5': '163 042-5',
+      '163_043-3': '163 034-2',
+      '163_045-8': '163 034-2',
+      '163_046-6': '163 034-2',
     };
 
     trains.forEach(train => {
@@ -461,10 +459,10 @@ document.addEventListener('DOMContentLoaded', () => {
           if (vehicle.startsWith('CD163/')) {
             const match = vehicle.match(/CD163\/(.+?):/);
             if (match) {
-              const extracted = match[1];
-              const vehicleNumber = extracted.replace(/_/g, ' ');
-              imgName = vehicleImageMap[vehicleNumber] || extracted;
-              vehicleNumberText = vehicleNumber;
+              const extracted = match[1]; // 163_042-5
+
+              imgName = vehicleImageMap[extracted] || extracted;
+              vehicleNumberText = extracted.replace(/_/g, ' '); // 163 042-5
               nickname = 'ČD 163';
             }
           } else if (/^11xa\/80s\//.test(vehicle)) {
